@@ -1,0 +1,42 @@
+# DA-SAM3 default configuration
+# Dual-Adaptive SAM3: Hierarchical Routing over Low-Rank Expert Layers
+
+sam3_root: null  # set via SAM3_ROOT env or --sam3-root
+checkpoint_path: null
+load_from_hf: true
+
+model:
+  d_model: 256
+  dim_feedforward: 2048
+  num_experts: 4
+  top_k: 2
+  rank: 8
+  dropout: 0.1
+  activation: relu
+
+training:
+  stage: warmup  # warmup | routing
+  dataset: synapse  # synapse | mmwhs | btcv | acdc
+  data_root: "data/synapse"
+  batch_size: 8
+  num_workers: 4
+  image_size: 224
+  num_epochs: 100
+  learning_rate: 0.0005
+  weight_decay: 0.1
+  warmup_epochs: 5
+  lambda_balance: 0.01
+  lambda_sparse: 0.001
+  grad_clip: 1.0
+  amp: true
+
+stage2:
+  num_epochs: 30
+  learning_rate: 0.0001
+
+output:
+  output_dir: "outputs/da_sam3"
+  save_every: 10
+
+hardware:
+  device: cuda
